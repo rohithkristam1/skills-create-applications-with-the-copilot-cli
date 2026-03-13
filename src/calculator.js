@@ -63,6 +63,41 @@ function divide(...operands) {
 }
 
 /**
+ * Calculate the remainder of division (modulo operation)
+ * @param {number} a - The dividend
+ * @param {number} b - The divisor
+ * @returns {number|string} Remainder of a divided by b, or error message
+ */
+function modulo(a, b) {
+  if (b === 0) {
+    return 'Error: Division by zero is not allowed';
+  }
+  return a % b;
+}
+
+/**
+ * Raise a base to a given exponent (power operation)
+ * @param {number} base - The base number
+ * @param {number} exponent - The exponent
+ * @returns {number} Base raised to the exponent
+ */
+function power(base, exponent) {
+  return Math.pow(base, exponent);
+}
+
+/**
+ * Calculate the square root of a number
+ * @param {number} n - The number to find the square root of
+ * @returns {number|string} Square root of n, or error message for negative numbers
+ */
+function squareRoot(n) {
+  if (n < 0) {
+    return 'Error: Cannot calculate square root of a negative number';
+  }
+  return Math.sqrt(n);
+}
+
+/**
  * Parse and execute calculator operations
  * @param {string} input - User input command
  * @returns {string} Result of the operation
@@ -86,11 +121,28 @@ function calculate(input) {
     case 'divide':
       const divideResult = divide(...operands);
       return typeof divideResult === 'string' ? divideResult : `Result: ${divideResult}`;
+    case 'modulo':
+      if (operands.length !== 2) {
+        return 'Error: Modulo requires exactly two operands (e.g., modulo 10 3)';
+      }
+      const moduloResult = modulo(operands[0], operands[1]);
+      return typeof moduloResult === 'string' ? moduloResult : `Result: ${moduloResult}`;
+    case 'power':
+      if (operands.length !== 2) {
+        return 'Error: Power requires exactly two operands (e.g., power 2 3)';
+      }
+      return `Result: ${power(operands[0], operands[1])}`;
+    case 'sqrt':
+      if (operands.length !== 1) {
+        return 'Error: Square root requires exactly one operand (e.g., sqrt 16)';
+      }
+      const sqrtResult = squareRoot(operands[0]);
+      return typeof sqrtResult === 'string' ? sqrtResult : `Result: ${sqrtResult}`;
     case 'exit':
     case 'quit':
       return null;
     default:
-      return 'Error: Unknown operation. Use add, subtract, multiply, or divide.';
+      return 'Error: Unknown operation. Use add, subtract, multiply, divide, modulo, power, or sqrt.';
   }
 }
 
@@ -106,6 +158,9 @@ function showWelcome() {
   console.log('  subtract <num1> <num2> [<num3> ...] - Subtraction');
   console.log('  multiply <num1> <num2> [<num3> ...] - Multiplication');
   console.log('  divide <num1> <num2> [<num3> ...]   - Division');
+  console.log('  modulo <num1> <num2>                - Modulo (remainder)');
+  console.log('  power <base> <exponent>             - Exponentiation');
+  console.log('  sqrt <num>                          - Square root');
   console.log('  exit or quit                        - Exit calculator\n');
 }
 
@@ -138,7 +193,7 @@ function startCalculator() {
   promptUser();
 }
 
-module.exports = { add, subtract, multiply, divide };
+module.exports = { add, subtract, multiply, divide, modulo, power, squareRoot };
 
 if (require.main === module) {
   startCalculator();
